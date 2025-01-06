@@ -32,9 +32,12 @@ def get_condition_defaults():
 
 def cursor_condition(data):
     pos_str = subprocess.check_output(["kdotool", "getmouselocation"], text=True)
-    fields = pos_str.split(" ")
-    x = int(fields[0].split(":")[1])
-    y = int(fields[1].split(":")[1])
+    try:
+        fields = pos_str.split(" ")
+        x = int(fields[0].split(":")[1])
+        y = int(fields[1].split(":")[1])
+    except IndexError:
+        return False
 
     min_x = obs.obs_data_get_double(data, "kwin_cursor_min_x")
     max_x = obs.obs_data_get_double(data, "kwin_cursor_max_x")
