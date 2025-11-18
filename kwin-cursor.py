@@ -34,8 +34,12 @@ def get_condition_defaults():
 
 
 def cursor_condition(data, instance_id):
-    pos_str = subprocess.check_output(["kdotool", "getmouselocation"], text=True)
+    cmd_ret = subprocess.run(["kdotool", "getmouselocation"], text=True, capture_output=True)
+    if cmd_ret.returncode != 0:
+        print(f"kdotool exited with code {cmd_ret.returncode}")
+        return False;
     try:
+        pos_str = cmd_ret.stdout
         fields = pos_str.split(" ")
         x = int(fields[0].split(":")[1])
         y = int(fields[1].split(":")[1])
